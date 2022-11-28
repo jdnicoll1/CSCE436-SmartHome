@@ -14,6 +14,7 @@ mpHands = mp.solutions.hands
 hands = mpHands.Hands()
 mpDraw = mp.solutions.drawing_utils
 totalFingers = 0
+function = ""
 
 def detectHands(results): 
     
@@ -50,7 +51,6 @@ if __name__ == "__main__":
         detectHands(results)
         landmarkList = findPosition(results)
 
-        
         if(len(landmarkList) != 0): 
             #https://google.github.io/mediapipe/solutions/hands.html -- list of hand landmarks
             #if landmark 8 is below landmark 6, then finger is closed
@@ -70,14 +70,27 @@ if __name__ == "__main__":
                     numFingers.append(0)
 
             totalFingers = numFingers.count(1) #count the number of fingers in the array to get number held up
-            print(totalFingers)
+            if(totalFingers == 1): 
+                function = "Turn on TV"
+            elif(totalFingers == 2): 
+                function = "Volume Up"
+            elif(totalFingers == 3): 
+                function = "Volume Down"
+            elif(totalFingers == 4): 
+                function = "Turn on Oven"
+            elif(totalFingers == 5): 
+                function = "Turn on Car"
+        else:
+            totalFingers = 0
+            function = ""
 
             
-            
-    
+        #cv2.rectangle(img, (20,20), (280,150), (240,255,255))
         img_invert = cv2.flip(img, 1) #people are more used to inverted image
-        cv2.rectangle(img_invert, (20,225), (170,425), (240,255,255), cv2.FILLED)
-        cv2.putText(img_invert, str(totalFingers), (45,375), cv2.FONT_HERSHEY_PLAIN, 10, (0,0,0), 25)
+        #cv2.rectangle(img_invert, (20,250), (170,450), (240,255,255))
+        cv2.putText(img_invert, str(totalFingers), (45,390), cv2.FONT_HERSHEY_PLAIN, 10, (255,255,0), 15)
+        cv2.putText(img_invert, function, (375,70), cv2.FONT_HERSHEY_PLAIN, 2, (255,255,0), 2)
+        
         cv2.imshow("Image", img_invert)
         if cv2.waitKey(1) & 0xFF == ord('q'): #press q to quit
             break
