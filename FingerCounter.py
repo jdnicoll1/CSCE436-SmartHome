@@ -48,9 +48,27 @@ if __name__ == "__main__":
         detectHands(results)
         landmarkList = findPosition(results)
 
+        
         if(len(landmarkList) != 0): 
-            if landmarkList[8][2] < landmarkList[6][2]:
-                print("Index finger open")
+            #https://google.github.io/mediapipe/solutions/hands.html -- list of hand landmarks
+            #if landmark 8 is below landmark 6, then finger is closed
+            numFingers = []
+            tipIds = [4,8,12,16,20]
+
+            #thumb
+            if(landmarkList[tipIds[0]][1] > landmarkList[tipIds[0]-1][1]):
+                numFingers.append(1)
+            else:
+                numFingers.append(0)
+            #not thumb
+            for id in range(1, 5):
+                if(landmarkList[tipIds[id]][2] < landmarkList[tipIds[id]-2][2]):
+                    numFingers.append(1)
+                else:
+                    numFingers.append(0)
+
+            totalFingers = numFingers.count(1) #count the number of fingers in the array to get number held up
+            print(totalFingers)
     
         img_invert = cv2.flip(img, 1) #people are more used to inverted image
         cv2.imshow("Image", img_invert)
