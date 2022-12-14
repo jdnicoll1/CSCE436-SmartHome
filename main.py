@@ -17,8 +17,6 @@ totalFingers = 0
 function = ""
 
 def detectHands(results): 
-    
-    
     if(results.multi_hand_landmarks): 
         for handLandmarks in results.multi_hand_landmarks: 
             return mpDraw.draw_landmarks(img, handLandmarks, mpHands.HAND_CONNECTIONS)
